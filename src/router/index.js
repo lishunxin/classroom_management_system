@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import getApprovalDetail from '@/components/getApprovalDetail'
-import getRoom from '@/components/getRoom'
-import getRoomDetailByIdAndDate from '@/components/getRoomDetailByIdAndDate'
-import getStudentRSVById from '@/components/getStudentRSVById'
-import home from '@/components/home'
-import insertInfor from '@/components/insertInfor'
-import login from '@/components/login'
-import register from '@/components/register'
+import getApprovalDetail from '../components/getApprovalDetail'
+import getRoom from '../components/getRoom'
+import getRoomDetailByIdAndDate from '../components/getRoomDetailByIdAndDate'
+import getStudentRSVById from '../components/getStudentRSVById'
+import home from '../components/home'
+import insertInfor from '../components/insertInfor'
+import login from '../components/login'
+import register from '../components/register'
+import foowrap from  '../components/foowrap'
+import mine from '../components/mine'
+import choice from '../components/choice'
+
 
 
 Vue.use(Router)
@@ -15,7 +19,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/getApprovalDetail',
       name: 'getApprovalDetail',
       component: getApprovalDetail
     },
@@ -35,7 +39,7 @@ export default new Router({
       component: getStudentRSVById
     },
     {
-      path: '/home',
+      path: '/',
       name: 'home',
       component: home
     },
@@ -53,6 +57,21 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: register
+    },
+    {
+      path:'/foowrap',
+      name:'/foowrap',
+      component: foowrap
+    },
+    {
+      path:'/mine',
+      name:'/mine',
+      component:mine
+    },
+    {
+      path:'/choice',
+      name:'/choice',
+      component:choice
     }
 
   ]

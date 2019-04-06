@@ -1,40 +1,47 @@
 <template>
 <div>
+  <header>
+    <div id="title">我的预约</div>
+    <i class="el-icon-arrow-left" @click="tohome"></i>
+  </header>
   <p>教室详情</p>
-  <div>
-    <span>教学楼</span><span>教一</span>
-  </div>
-  <div>
-    <span>教室号</span><span>430</span>
-  </div>
-  <div>
-    <span>教室位置</span><span>东南角</span>
-  </div>
-  <div>
-    <span>教室位置</span><span>120</span>
-  </div>
-  <div>
-    <span>教室器材</span><span>投影仪</span>
-  </div>
+  <el-row :gutter="16">
+    <el-col :span="8">教学楼号：</el-col>
+    <el-col :span="6">教一</el-col>
+  </el-row>
+  <el-row :gutter="16">
+    <el-col :span="8">教室号：</el-col>
+    <el-col :span="6">430</el-col>
+  </el-row>
+  <el-row :gutter="16">
+    <el-col :span="8">教室位置：</el-col>
+    <el-col :span="6">东南角</el-col>
+
+  </el-row>
+  <el-row :gutter="16">
+    <el-col :span="8">座位数：</el-col>
+    <el-col :span="6">120</el-col>
+
+  </el-row>
+  <el-row :gutter="16">
+    <el-col :span="8">教室器材：</el-col>
+    <el-col :span="6">投影仪</el-col>
+
+  </el-row><br>
   <span>请选择日期</span>
   <div>
     <div class="block">
       <span class="demonstration">起始日期</span>
       <el-date-picker
-        v-model="value2"
-        type="datetime"
-        placeholder="选择日期时间"
+        v-model="value7"
+        size="mini"
+        type="daterange"
         align="right"
-        :picker-options="pickerOptions1">
-      </el-date-picker>
-    </div>
-    <div class="block">
-      <span class="demonstration">截止日期</span>
-      <el-date-picker
-        v-model="value3"
-        type="datetime"
-        placeholder="选择日期时间"
-        default-time="12:00:00">
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions2">
       </el-date-picker>
     </div>
     <div>
@@ -80,12 +87,49 @@
           date: '2016-05-03',
           name: '王小虎',
           address: '上海市普陀区金沙江路 1516 弄'
-        }]
+        }],
+          pickerOptions2: {
+            shortcuts: [{
+              text: '最近一周',
+              onClick(picker) {
+                const end = new Date();
+                const start = new Date();
+                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                picker.$emit('pick', [start, end]);
+              }
+            }]
+          },
+          value6: '',
+          value7: ''
+        }
+      },
+    methods:{
+      tohome:function () {
+        this.$router.push({path:'./#'})
       }
     }
   }
 </script>
 
 <style scoped>
-
+  header{
+    width: 100%;
+    height:1.58rem;
+    background-color: #fff;
+  }
+  .el-icon-arrow-left{
+    font-size: 1.45rem;
+    position: absolute;
+    left: 1.5rem;
+    top: 3.65rem;
+  }
+  header #title{
+    float: left;
+    text-align: center;
+    font-size: 1.2rem;
+    width: 100%;
+    height: 1.58rem;
+    line-height: 1.68rem;
+    margin-bottom: 1rem;
+  }
 </style>
