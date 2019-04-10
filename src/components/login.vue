@@ -6,10 +6,10 @@
     </header>
     <div class="pass">
       <el-row>
-        <el-col :span="6">学号：</el-col>
+        <el-col :span="6" >学号：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入学号"
-          v-model="input2">
+          v-model="userId">
         </el-input></el-col>
       </el-row>
     </div>
@@ -19,7 +19,7 @@
         <el-col :span="6">密码：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入密码"
-          v-model="input2">
+          v-model="password">
         </el-input></el-col>
       </el-row>
     </div>
@@ -27,25 +27,49 @@
     <div class="pass">
 
       <el-row>
-        <el-col :span="12"><el-checkbox v-model="checked" style="line-height: 40px">记住密码</el-checkbox></el-col>
+        <el-col :span="12"><el-checkbox v-model="rememberMe" style="line-height: 40px"  >记住密码</el-checkbox></el-col>
         <el-col :span="6"><el-button type="text" @click="register" >去注册</el-button></el-col>
       </el-row>
     </div>
     <div class="btn">
-      <el-button type="primary">   登录   </el-button>
+      <el-button type="primary" @click="tologin">   登录   </el-button>
     </div>
   </div>
 </template>
 
 <script>
+  import axios from 'axios'
+  import qs from 'qs'
     export default {
         name: "login",
       data(){
         return{
-
+          rememberMe:'false',
+          userId:'',
+          password:''
         }
       },
       methods:{
+       tologin :function(){
+         let data1 = ({
+           "userId": this.userId,
+           "password": this.password,
+           "rememberMe":this.rememberMe
+         })
+         console.log(data1)
+         axios({
+           method: 'post',
+           url: 'http://yizhuoyang.free.idcfengye.com/login/subLogin',
+           data: data1
+         }).then((response) => {
+           this.uId = response.data
+           if (response.data !== 0) {
+             this.$router.push({path: '/home', query: {'uid': this.uId}})
+           } else if (response.data === 0) {
+           }
+         }).catch(error => function () {
+         })
+       } ,
       register : function () {
         this.$router.push({path:'./register'})
       },

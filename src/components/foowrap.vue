@@ -49,6 +49,7 @@
     height: 50px;
     bottom: 65px;
     background-color: #fff;
+    background-image: url("../assets/home.jpg");
   }
   .footer-warp a{
     display: block;

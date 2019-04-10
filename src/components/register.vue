@@ -10,7 +10,7 @@
         <el-col :span="6">学号：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入学号"
-          v-model="input2">
+          v-model="userId">
         </el-input></el-col>
       </el-row>
     </div>
@@ -19,7 +19,7 @@
         <el-col :span="6">姓名：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入姓名"
-          v-model="input2">
+          v-model="username">
         </el-input></el-col>
       </el-row>
     </div>
@@ -29,24 +29,30 @@
         <el-col :span="6">密码：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入密码"
-          v-model="input2">
+          v-model="password">
         </el-input></el-col>
       </el-row>
     </div>
 
     <div class="pass">
-      性别：
-      <el-radio v-model="radio3" label="1" border>男</el-radio>
-      <el-radio v-model="radio3" label="2" border>女</el-radio>
+
+      <el-row>
+        <el-col :span="6"> 性别：</el-col>
+        <el-col :span="18" style="margin-left: -25px;"><el-radio v-model="sex" label="1" border>&nbsp;&nbsp;男&nbsp;&nbsp;</el-radio>
+          <el-radio v-model="sex" label="2" border>&nbsp;&nbsp;&nbsp;女&nbsp;&nbsp;</el-radio></el-col>
+      </el-row>
     </div>
 
     <div class="pass">
-      身份：
-      <el-radio v-model="radio3" label="1" border>学生</el-radio>
-      <el-radio v-model="radio3" label="2" border>管理员</el-radio>
+      <el-row>
+        <el-col :span="6"> 身份：</el-col>
+        <el-col :span="18" style="margin-left: -22px;"> <el-radio v-model="roles" label="1" border >学&nbsp;生</el-radio>
+          <el-radio v-model="roles" label="2" border>管理员</el-radio></el-col>
+      </el-row>
+
     </div>
     <div class="btn">
-      <el-button type="primary">   注册   </el-button>
+      <el-button type="primary" @click="register">   注册   </el-button>
     </div>
   </div>
 </template>
@@ -56,12 +62,42 @@
         name: "register",
       data(){
         return{
-
+          userId:'',
+          username:'',
+          password:'',
+          sex:true,
+          roles:''
         }
       },
       methods:{
         tologin : function () {
           this.$router.push({path:'./login'})
+        },
+        register:function(){
+          let data1 = ({
+            "userId":this.userId,
+            "username":this.username,
+            "password":this.password,
+            "sex":true,
+            "roles":this.roles
+          })
+          axios({
+            method: 'post',
+            url: 'http://login/register',
+            data: data1,
+            headers: {'Content-Type': 'application/json'}
+          }).then((response) => {
+            this.uId = response.data
+            if (response.data !== 0) {
+              this.$router.push({path: '/home', query: {'uid': this.uId}})
+            } else if (response.data === 0) {
+              this.telNum = null
+              this.pw = null
+            }
+            console.log(this.uId)
+          }).catch(error => function () {
+            console.log(error)
+          })
         }
       }
     }

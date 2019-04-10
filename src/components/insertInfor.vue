@@ -16,17 +16,14 @@
     <el-row :gutter="16">
       <el-col :span="8">教室位置：</el-col>
       <el-col :span="6">东南角</el-col>
-      <el-col :span="10" style="color: red">温馨提示：</el-col>
     </el-row>
     <el-row :gutter="16">
       <el-col :span="8">座位数：</el-col>
       <el-col :span="6">120</el-col>
-      <el-col :span="10" style="color: red">预约后需要联系杨老师：</el-col>
     </el-row>
     <el-row :gutter="16">
       <el-col :span="8">教室器材：</el-col>
       <el-col :span="6">投影仪</el-col>
-      <el-col :span="10" style="color: red">电话：1888888</el-col>
     </el-row><br>
     <span>请选择日期</span>
     <div>
