@@ -23,32 +23,32 @@
         <div class="cantainer">
           <el-table :data="tableData" style="width: 100%">
             <el-table-column
-              prop="date"
+              prop="teachingBuilding"
               label="教学楼"
               width="70">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="roomNumber"
               label="教室号"
               width="70">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="date"
               label="日期"
               width="70">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="time"
               label="时间"
               width="70">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="userName"
               label="申请人"
               width="70">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="reservationDesc"
               label="申请描述"
               width="80">
             </el-table-column>
@@ -82,20 +82,17 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
-    methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-      tohome:function () {
-        this.$router.push({path:'./#'})
-      }
-    },
     data() {
       return {
+        tableData:[],
+        date:'',
+        reservationDesc:'',
+        roomNumber:'',
+        teachingBuilding:'',
+        userName:'',
+        time:'',
         pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
@@ -109,6 +106,44 @@
         },
         value6: '',
         value7: ''
+      }},
+    created () {
+      let userId = this.$route.query.userId
+      let id = this.$route.query.id
+      this.userId = userId
+      this.id = id
+      console.log(this.userId)
+      console.log(this.id)
+      this.getmsg()
+    },
+    methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      tohome:function () {
+        this.$router.push({path:'./#'})
+      },
+      getmsg:function(){
+        let self = this
+        let data1 = ({
+        })
+        console.log(data1)
+        axios({
+          method: 'get',
+          url: 'http://yizhuoyang.free.idcfengye.com/rsv/high/getApprovalDetail',
+          data: data1
+        }).then((response) => {
+          console.log(response)
+          let tableData=[]
+          console.log(eval(response.data.data))
+          this.tableData = eval(response.data.data)
+          console.log(self.tableData)
+
+        }).catch(error => function () {
+        })
       }
     }
   }

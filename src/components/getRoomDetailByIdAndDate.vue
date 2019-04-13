@@ -103,6 +103,11 @@
           value7: ''
         }
       },
+    created () {
+      let userId = this.$route.query.userId
+      this.userId = userId
+      console.log(this.userId)
+    },
     methods:{
       tohome:function () {
         this.$router.push({path:'./#'})

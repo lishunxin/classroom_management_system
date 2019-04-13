@@ -3,31 +3,122 @@
   <header>
     <div id="title">我的预约</div>
     <i class="el-icon-arrow-left" @click="tohome"></i>
-
   </header>
-  <div class="login" @click="login">
-    <span>{{uname}}</span><br/>
-    <span>{{label}}</span>
-  </div>
 
+  <div>
+    <el-date-picker
+      v-model="value7"
+      size="mini"
+      type="daterange"
+      align="right"
+      unlink-panels
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      :picker-options="pickerOptions2">
+    </el-date-picker>
+  </div>
+  <div class="crumbs">
+    <div class="cantainer">
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column
+          prop="teachingBuilding"
+          label="教学楼"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="roomNumber"
+          label="教室号"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="date"
+          label="日期"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="time"
+          label="时间"
+          width="80">
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage2"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="sizes, prev, pager, next"
+        :total="50">
+      </el-pagination>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
+  import axios from 'axios'
     export default {
         name: "mine",
       data(){
           return{
-            uname: '未登录',
-            label:'点击登录'
+            date:'',
+            roomId:'',
+            roomNumber:'',
+            teachingBuilding:'',
+            time:'',
+            user:'点击登录',
+            tableData:[],
+            pickerOptions2: {
+              shortcuts: [{
+                text: '最近一周',
+                onClick(picker) {
+                  const end = new Date();
+                  const start = new Date();
+                  start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                  picker.$emit('pick', [start, end]);
+                }
+              }]
+            },
+            value6: '',
+            value7: ''
           }
       },
+      created () {
+        let userId = this.$route.query.userId
+        this.userId = userId
+        console.log(this.userId)
+        this.getmsge()
+      },
       methods:{
+        getmsge:function(){
+          let self = this
+          axios.get( 'http://yizhuoyang.free.idcfengye.com//rsv/getStudentRSVById', {
+            params: {
+              'uid':'10000111'
+            }
+          })
+            .then(function (response) {
+              console.log(response)
+              let tableData=[]
+              self.tableData = eval(response.data.data)
+              console.log(self.tableData)
+            })
+            .catch(function (err) {
+              console.log(err);
+            })
+        },
         tohome:function () {
-          this.$router.push({path:'./#'})
+          this.$router.push({path:'./#',query:{'userId': "this.userId"}})
         },
         login:function () {
           this.$router.push({path:'./login'})
+        },
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
         }
       }
     }

@@ -6,11 +6,12 @@
     </header>
     <div class="pass">
       <el-row>
-        <el-col :span="6" >学号：</el-col>
-        <el-col :span="14"><el-input
-          placeholder="请输入学号"
+        <el-col :span="6"  >学号：</el-col>
+        <el-col :span="14"><el-input  type="number"
+          placeholder="请输入学号" style="maxlength :10; minlength:3;"
           v-model="userId">
-        </el-input></el-col>
+        </el-input>
+        </el-col>
       </el-row>
     </div>
 
@@ -19,7 +20,7 @@
         <el-col :span="6">密码：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入密码"
-          v-model="password">
+          v-model="password" type="password">
         </el-input></el-col>
       </el-row>
     </div>
@@ -62,14 +63,14 @@
            url: 'http://yizhuoyang.free.idcfengye.com/login/subLogin',
            data: data1
          }).then((response) => {
-           this.uId = response.data
-           if (response.data !== 0) {
-             this.$router.push({path: '/home', query: {'uid': this.uId}})
+           console.log(response.data.code)
+           if (response.data.code === 1) {
+             this.$router.push({path: '/#', query: {'userId': this.userId}})
            } else if (response.data === 0) {
            }
          }).catch(error => function () {
          })
-       } ,
+       },
       register : function () {
         this.$router.push({path:'./register'})
       },

@@ -3,14 +3,12 @@ import Router from 'vue-router'
 import getApprovalDetail from '../components/getApprovalDetail'
 import getRoom from '../components/getRoom'
 import getRoomDetailByIdAndDate from '../components/getRoomDetailByIdAndDate'
-import getStudentRSVById from '../components/getStudentRSVById'
 import home from '../components/home'
 import insertInfor from '../components/insertInfor'
 import login from '../components/login'
 import register from '../components/register'
 import foowrap from  '../components/foowrap'
 import mine from '../components/mine'
-import choice from '../components/choice'
 
 
 
@@ -32,11 +30,6 @@ export default new Router({
       path: '/getRoomDetailByIdAndDate',
       name: 'getRoomDetailByIdAndDate',
       component:getRoomDetailByIdAndDate
-    },
-    {
-      path: '/getStudentRSVById',
-      name: 'getStudentRSVByIdd',
-      component: getStudentRSVById
     },
     {
       path: '/',
@@ -67,11 +60,6 @@ export default new Router({
       path:'/mine',
       name:'/mine',
       component:mine
-    },
-    {
-      path:'/choice',
-      name:'/choice',
-      component:choice
     }
 
   ]

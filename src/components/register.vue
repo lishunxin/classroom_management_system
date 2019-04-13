@@ -29,7 +29,7 @@
         <el-col :span="6">密码：</el-col>
         <el-col :span="14"><el-input
           placeholder="请输入密码"
-          v-model="password">
+          v-model="password" type="password">
         </el-input></el-col>
       </el-row>
     </div>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
     export default {
         name: "register",
       data(){
@@ -66,7 +67,8 @@
           username:'',
           password:'',
           sex:true,
-          roles:''
+          roles:'',
+          perms:" user:add"
         }
       },
       methods:{
@@ -79,17 +81,20 @@
             "username":this.username,
             "password":this.password,
             "sex":true,
-            "roles":this.roles
+            "roles":'student',
+            "perms":" user:add"
           })
           axios({
             method: 'post',
-            url: 'http://login/register',
+            url: 'http://yizhuoyang.free.idcfengye.com/login/register',
             data: data1,
+
             headers: {'Content-Type': 'application/json'}
+
           }).then((response) => {
             this.uId = response.data
             if (response.data !== 0) {
-              this.$router.push({path: '/home', query: {'uid': this.uId}})
+              this.$router.push({path: '/home', query: {'uid': this.uId,'username':this.username}})
             } else if (response.data === 0) {
               this.telNum = null
               this.pw = null
