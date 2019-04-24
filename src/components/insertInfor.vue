@@ -27,19 +27,28 @@
     </el-row><br>
     <span>请选择日期</span>
     <div>
-      <div class="block">
-        <el-date-picker
-          v-model="value7"
-          size="mini"
-          type="daterange"
-          align="right"
-          unlink-panels
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          :picker-options="pickerOptions2">
-        </el-date-picker>
-      </div>
+      <!--<div class="block">
+        <mt-datetime-picker
+          v-model="pickerValue"
+          type="date"
+          year-format="{value} 年"
+          month-format="{value} 月"
+          date-format="{value} 日"
+          @confirm="handleConfirm()"
+        >开始
+        </mt-datetime-picker>
+
+        <mt-datetime-picker
+          v-model="pickerValue"
+          ref="picker"
+          type="time"
+          year-format="{value} 年"
+          month-format="{value} 月"
+          date-format="{value} 日"
+        >
+        </mt-datetime-picker>
+
+      </div>-->
       <div>
         <el-table :data="tableData" style="width: 100%">
           <el-table-column
@@ -70,7 +79,12 @@
 </template>
 
 <script>
+  import 'mint-ui/lib/style.min.css'
   import axios from 'axios'
+  import { Toast } from 'mint-ui'
+  import { MessageBox } from 'mint-ui'
+  import { DatetimePicker } from 'mint-ui'
+  /*Vue.component(DatetimePicker.name, DatetimePicker)*/
   import Bus from '../assets/Bus.js'
     export default {
         name: "insertInfor",
@@ -111,12 +125,17 @@
           self.id=val
           console.log(self.id)
         })
+
+       /*let i= this.$route.params.id
+        this.id=i
+        console.log(this.$route.params.id)*/
        /* let id = this.$route.params.id
         this.id = id
         console.log(this.id)
         this.getmsge(*/
       },
       mounted(){
+          this.getmsge()
         /*如果cookie不存在，则跳转到登录页*/
         if(userId ===""){
           this.$router.push('/')
@@ -124,12 +143,23 @@
       },
 
       methods:{
-
+        selectData () { // 打开时间选择器
+          // 如果已经选过日期，则再次打开时间选择器时，日期回显（不需要回显的话可以去掉 这个判断）
+          if (this.selectedValue) {
+            this.dateVal = this.selectedValue
+          } else {
+            this.dateVal = new Date()
+          }
+          this.$refs['datePicker'].open()
+        },
+        dateConfirm () { // 时间选择器确定按钮，并把时间转换成我们需要的时间格式
+          this.selectedValue = formatDateMin(this.dateVal)
+      },
+        openPicker() {
+          this.$refs.picker.open();
+        },
         open3() {
-          this.$prompt('请输入理由', '提示', {
-            confirmButtonText: '确定',
-
-          }).then(({ value }) => {
+          MessageBox.prompt('请输入理由').then(({ value, action }) => {
             this.$message({
               type: 'success',
               message: '理由: ' + value
@@ -141,16 +171,10 @@
             });
           });
       },
-        open() {
-          this.$alert('预约成功', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info',
-                roundButton:ture,
-                message: `action: ${ action }`
-              });
-            }
+        open1() {
+          Toast({
+            message: '预约成功',
+            iconClass: 'icon icon-success'
           });
 
         },
@@ -169,7 +193,7 @@
             .then(function (response) {
               console.log(response.data.message)
               if(response.data.message==='fail'){
-                  self.open()
+                self.open1()
               }
             })
             .catch(function (err) {
@@ -177,21 +201,24 @@
             })
         },
         tohome:function () {
+          this.$router.push({path:'./'})
         },
         getmsge:function(){
           let self = this
           axios.get( 'http://yizhuoyang.free.idcfengye.com/cls/getRoomDetailByIdAndDate', {
             params: {
-              'id': this.id
+              'id': "2",
+              "date":"20190423"
         }
         })
         .then(function (response) {
           console.log(response.data.data)
           let tableData=[]
           let data =eval(response.data.data)
-          let roomdata = data.classroom
+          console.log(data)
+          let roomdata =data.classroom
           self.tableData = eval(data.status)
-          console.log(tableData)
+          console.log(self.tableData)
           self.seatsNumber= roomdata.seatsNumber
           self.roomLocal=roomdata.roomLocal
           self.roomNumber = roomdata.roomNumber
@@ -226,5 +253,10 @@
     height: 1.58rem;
     line-height: 1.68rem;
     margin-bottom: 1rem;
+  }
+  .block{
+    height: 2rem;
+    width: 100%;
+    background-color: #ccc;
   }
 </style>

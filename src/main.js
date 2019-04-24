@@ -14,13 +14,17 @@ Vue.prototype.$http = axios
 Vue.prototype.$qs = qs
 axios.defaults.baseURL = '/ajaxurul/welfare/gpa'
 import VueResource from 'vue-resource'
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
 
+Vue.use(MintUI)
 Vue.use(VueResource)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(router)
 
-/* eslint-disable no-new */
+const plugin = { install (Vue, options) {  Vue.component() } }
+Vue.use(plugin)
 new Vue({
     el: '#app',
     router,Element,

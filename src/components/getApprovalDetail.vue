@@ -63,7 +63,7 @@
             <el-table-column
               prop="address"
               label="驳回原因">
-              <input typeof="text"/>
+              <span @click="open3">理由</span>
             </el-table-column>
           </el-table>
           <el-pagination
@@ -83,6 +83,7 @@
 
 <script>
   import axios from 'axios'
+  import { MessageBox } from 'mint-ui'
   export default {
     data() {
       return {
@@ -123,6 +124,19 @@
       }
     },
     methods: {
+      open3() {
+        MessageBox.prompt('请输入理由').then(({ value, action }) => {
+          this.$message({
+            type: 'success',
+            message: '理由: ' + value
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },

@@ -62,8 +62,8 @@
       </el-table-column>
       <el-table-column
         prop="id"
-        label="操作" width="80" >
-        <span @click="insertInfor(tableData.id)">详情</span>
+        label="操作" width="80" @blur="reid">
+        <span @click="insertInfor">详情</span>
       </el-table-column>
     </el-table>
   </div>
@@ -125,18 +125,30 @@
         })
       },
       methods:{
+        reid:function(id){
+          console.log(id)
+          return id;
+        },
         tohome:function () {
           this.$router.push({path:'./#',query:{'userId': this.userId}})
         },
         insertInfor:function(){
-        /*  this.$router.push({path:'./insertInfor',query:{'id': this.id}})*/
-         Bus.$emit('send',this.id)
+         /* this.$router.push({
+            name: 'insertInfor',
+            params: {
+              id: id
+            }
+          })*/
+          this.$router.push({path:'./insertInfor'})
+          console.log(tableData.index.id)
+         /*Bus.$emit('send',this.id)
+          console.log(this.id)
           this.$router.push({
             path: './insertInfor',
             params: {
               id: id
             }
-          })
+          })*/
         },
         room : function(){
           let self = this
@@ -156,6 +168,7 @@
 
            this.tableData = eval(response.data.data)
             console.log(self.tableData)
+           console.log(self.tableData[i].id)
 
           }).catch(error => function () {
           })
