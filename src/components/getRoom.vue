@@ -63,10 +63,12 @@
         prop="roomLocal"
         label="教室地址" width="80" >
       </el-table-column>
-      <el-table-column
-        prop="id"
-        label="操作" width="80" >
-        <span @click="insertInfor">详情</span>
+      <el-table-column prop="id" label="操作" width="80" @blur="reid">
+        <template slot-scope="{row}">
+          <div>
+            <span @click="insertInfor(row.id)">详情</span>
+          </div>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -137,21 +139,11 @@
         tohome:function () {
           this.$router.push({path:'./#',query:{'userId': this.userId}})
         },
-        insertInfor:function(){
-         /* this.$router.push({
-            name: 'insertInfor',
-            params: {
-              id: id
-            }
-          })*/
-         /* this.$router.push({path:'./insertInfor'})
-          console.log(this.id)*/
-          Bus.$emit('send',this.id)
-          console.log(this.id)
+        insertInfor: function (id) {
           this.$router.push({
             path: './insertInfor',
-            params: {
-              id: this.id
+            query: {
+              id
             }
           })
         },

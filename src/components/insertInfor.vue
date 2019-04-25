@@ -81,6 +81,7 @@
   import axios from 'axios'
   import { Toast } from 'mint-ui'
   import { MessageBox } from 'mint-ui'
+  import { setCookie,getCookie,delCookie } from '../assets/cookie.js'
   import { DatetimePicker } from 'mint-ui'
   /*Vue.component(DatetimePicker.name, DatetimePicker)*/
   import Bus from '../assets/Bus.js'
@@ -116,35 +117,36 @@
           date:''
         }
       },
-
       created() {
+        axios.get('http://yizhuoyang.free.idcfengye.com/cls/getRoomDetailByIdAndDate', {
+          params: {
+            'id': this.$route.query.id,
+            "date": "20190423"
+          }
+        }).then((response) => {
+          let data = eval(response.data.data)
+          let roomdata = data.classroom
+          this.tableData = eval(data.status)
+          this.seatsNumber = roomdata.seatsNumber
+          this.roomLocal = roomdata.roomLocal
+          this.roomNumber = roomdata.roomNumber
+          this.teachingBuilding = roomdata.teachingBuilding
+          this.multimediaEquipment = roomdata.multimediaEquipment
+        })
+          .catch(function (err) {
+            console.log(err);
+          })
       },
-       mounted() {
-         let self =this
-         Bus.$on('send', function (val) {
-           axios.get( 'http://yizhuoyang.free.idcfengye.com/cls/getRoomDetailByIdAndDate', {
-             params: {
-               'id': val,
-               "date":"20190423"
-             }
-           }).then(function (response) {
-               // console.log(response.data.data)
-               let tableData=[]
-               let { classroom, status } = response.data ? response.data.data : []
-               self.tableData = status
-               self.seatsNumber= classroom.seatsNumber
-               self.roomLocal=classroom.roomLocal
-               self.roomNumber = classroom.roomNumber
-               self.teachingBuilding=classroom.teachingBuilding
-               self.multimediaEquipment=classroom.multimediaEquipment
-             })
-             .catch(function (err) {
-               console.log(err);
-             })
-         })
-
-       },
-
+      mounted(){
+        /*页面挂载获取保存的cookie值，渲染到页面上*/
+        let uname = getCookie('userId')
+        console.log(uname)
+        this.userId = uname
+        /*如果cookie不存在，则跳转到登录userId页*/
+        if(uname === ""){
+          this.userId = '登录/注册'
+        }
+      },
       methods:{
         selectData () { // 打开时间选择器
 
@@ -185,10 +187,10 @@
           let self = this
           axios.post( 'http://yizhuoyang.free.idcfengye.com/rsv/insertInfo', {
             params: {
-              "roomId": "1",
+              "roomId": this.$route.query.id,
               "date": "20190306",
               "time": "3",
-              "userId": "10000111",
+              "userId": this.userId,
               "userName": "zhangsan",
               "reservationDesc": "计算机协会又来了"
             }

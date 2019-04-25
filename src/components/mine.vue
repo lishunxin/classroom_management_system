@@ -58,11 +58,13 @@
 
 <script>
   import axios from 'axios'
+  import { setCookie,getCookie,delCookie } from '../assets/cookie.js'
     export default {
         name: "mine",
       data(){
           return{
             date:'',
+            userId:'',
             roomId:'',
             roomNumber:'',
             teachingBuilding:'',
@@ -85,15 +87,18 @@
           }
       },
       created () {
-        this.getmsge()
+
       },
       mounted(){
         let uname = getCookie('userId')
-        this.name = uname
+        console.log(uname)
+        this.userId = uname
+        console.log(this.userId)
         /*如果cookie不存在，则跳转到登录页*/
         if(uname ===""){
           this.$router.push('/')
         }
+        this.getmsge()
       },
       methods:{
         getmsge:function(){

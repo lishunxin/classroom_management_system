@@ -54,8 +54,9 @@
             </el-table-column>
             <el-table-column
               prop="address"
-              label="操作">
-              <el-row>
+              label="操作"
+              width="80">
+              <el-row style="width: 100%;margin: 0;padding: 0">
                 <el-button size="mini">同意</el-button>
                 <el-button size="mini">驳回</el-button>
               </el-row>
@@ -149,6 +150,7 @@
       getmsg:function(){
         let self = this
         let data1 = ({
+
         })
         console.log(data1)
         axios({
