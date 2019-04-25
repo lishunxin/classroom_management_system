@@ -1,7 +1,7 @@
 <template>
   <div>
     <header>
-      <div id="title" @click="getmsge">教室预约</div>
+      <div id="title" >教室预约</div>
       <i class="el-icon-arrow-left" @click="tohome"></i>
     </header>
     <p>教室详情</p>
@@ -37,7 +37,6 @@
           @confirm="handleConfirm()"
         >开始
         </mt-datetime-picker>
-
         <mt-datetime-picker
           v-model="pickerValue"
           ref="picker"
@@ -47,7 +46,6 @@
           date-format="{value} 日"
         >
         </mt-datetime-picker>
-
       </div>-->
       <div>
         <el-table :data="tableData" style="width: 100%">
@@ -116,35 +114,40 @@
           value6: '',
           value7: '',
           date:''
-      }
-      },
-
-      created () {
-          var self= this
-        Bus.$on('send',function(val){
-          self.id=val
-          console.log(self.id)
-        })
-
-       /*let i= this.$route.params.id
-        this.id=i
-        console.log(this.$route.params.id)*/
-       /* let id = this.$route.params.id
-        this.id = id
-        console.log(this.id)
-        this.getmsge(*/
-      },
-      mounted(){
-          this.getmsge()
-        /*如果cookie不存在，则跳转到登录页*/
-        if(userId ===""){
-          this.$router.push('/')
         }
       },
 
+      created() {
+      },
+       mounted() {
+         let self =this
+         Bus.$on('send', function (val) {
+           axios.get( 'http://yizhuoyang.free.idcfengye.com/cls/getRoomDetailByIdAndDate', {
+             params: {
+               'id': val,
+               "date":"20190423"
+             }
+           }).then(function (response) {
+               // console.log(response.data.data)
+               let tableData=[]
+               let { classroom, status } = response.data ? response.data.data : []
+               self.tableData = status
+               self.seatsNumber= classroom.seatsNumber
+               self.roomLocal=classroom.roomLocal
+               self.roomNumber = classroom.roomNumber
+               self.teachingBuilding=classroom.teachingBuilding
+               self.multimediaEquipment=classroom.multimediaEquipment
+             })
+             .catch(function (err) {
+               console.log(err);
+             })
+         })
+
+       },
+
       methods:{
         selectData () { // 打开时间选择器
-          // 如果已经选过日期，则再次打开时间选择器时，日期回显（不需要回显的话可以去掉 这个判断）
+
           if (this.selectedValue) {
             this.dateVal = this.selectedValue
           } else {
@@ -202,33 +205,7 @@
         },
         tohome:function () {
           this.$router.push({path:'./'})
-        },
-        getmsge:function(){
-          let self = this
-          axios.get( 'http://yizhuoyang.free.idcfengye.com/cls/getRoomDetailByIdAndDate', {
-            params: {
-              'id': "2",
-              "date":"20190423"
         }
-        })
-        .then(function (response) {
-          console.log(response.data.data)
-          let tableData=[]
-          let data =eval(response.data.data)
-          console.log(data)
-          let roomdata =data.classroom
-          self.tableData = eval(data.status)
-          console.log(self.tableData)
-          self.seatsNumber= roomdata.seatsNumber
-          self.roomLocal=roomdata.roomLocal
-          self.roomNumber = roomdata.roomNumber
-          self.teachingBuilding=roomdata.teachingBuilding
-          self.multimediaEquipment=roomdata.multimediaEquipment
-        })
-            .catch(function (err) {
-              console.log(err);
-            })
-        },
       }
     }
 </script>

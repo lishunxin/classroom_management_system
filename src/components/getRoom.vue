@@ -41,7 +41,7 @@
   <div>
     <el-table
       :data="tableData"
-      style="width: 100%">
+      style="width: 100%" @row-click="openDetails">
       <el-table-column
         prop=teachingBuilding
         label="教学楼"
@@ -51,6 +51,9 @@
         prop="roomNumber"
         label="教室号"
         width="65">
+        <template slot-scope="scope" style="display: none">
+          {{scope.$index+1}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="seatsNumber"
@@ -58,11 +61,11 @@
       </el-table-column>
       <el-table-column
         prop="roomLocal"
-        label="教室地址" width="80">
+        label="教室地址" width="80" >
       </el-table-column>
       <el-table-column
         prop="id"
-        label="操作" width="80" @blur="reid">
+        label="操作" width="80" >
         <span @click="insertInfor">详情</span>
       </el-table-column>
     </el-table>
@@ -83,7 +86,7 @@
             roomLocal:'',
             input5:'',
             id:'',
-            tableData:[],
+            tableData:this.tableData,
             options: [{
               value1: '选项1',
               label: '教一'
@@ -125,9 +128,11 @@
         })
       },
       methods:{
-        reid:function(id){
-          console.log(id)
-          return id;
+        openDetails(row, event, column){
+          let reid=row.id
+          this.id=reid
+          console.log(this.id)
+          console.log(row.id)
         },
         tohome:function () {
           this.$router.push({path:'./#',query:{'userId': this.userId}})
@@ -139,16 +144,16 @@
               id: id
             }
           })*/
-          this.$router.push({path:'./insertInfor'})
-          console.log(tableData.index.id)
-         /*Bus.$emit('send',this.id)
+         /* this.$router.push({path:'./insertInfor'})
+          console.log(this.id)*/
+          Bus.$emit('send',this.id)
           console.log(this.id)
           this.$router.push({
             path: './insertInfor',
             params: {
-              id: id
+              id: this.id
             }
-          })*/
+          })
         },
         room : function(){
           let self = this
@@ -166,7 +171,7 @@
             let tableData=[]
             console.log(eval(response.data.data))
 
-           this.tableData = eval(response.data.data)
+           self.tableData = eval(response.data.data)
             console.log(self.tableData)
            console.log(self.tableData[i].id)
 
